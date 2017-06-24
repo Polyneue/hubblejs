@@ -1,0 +1,36 @@
+{
+  "name": "hubble.js",
+  "version": "0.0.1",
+  "description": "A simple and scalable solution for building a static site with data from the Github API using Node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Polyneue/hubblejs.git"
+  },
+  "keywords": [
+    "github",
+    "static",
+    "site",
+    "website",
+    "generator"
+  ],
+  "author": "Ed Mendoza <polyneue@gmail.com> (http://www.edmendoza.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Polyneue/hubblejs/issues"
+  },
+  "homepage": "https://github.com/Polyneue/hubblejs#readme",
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "coveralls": "^2.13.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.6.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2"
+  }
+}
