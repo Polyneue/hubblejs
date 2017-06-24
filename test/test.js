@@ -1,11 +1,34 @@
 // Dependencies
 const expect = require('chai').expect;
+const utils = require('../libs/utilities.js');
+// const Hubble = require('../index.js');
 
-// Test case for Init
-describe('test case', () => {
-  it('test should be true', (done) => {
-    const test = true;
-    expect(test).to.be.true; // eslint-disable-line
-    done();
+describe('Hubble.js', () => {
+  describe('utils.reportError()', () => {
+    it('return error message', (done) => {
+      const message = utils.reportError('Label', 'Test Message');
+      expect(message).to.contain('Label');
+      expect(message).to.contain('Test Message');
+      done();
+    });
+  });
+
+  describe('utils.validateConfig()', () => {
+    it('return no errors', (done) => {
+      const errors = utils.validateConfig({
+        github: {
+          username: 'Polyneue',
+          token: 'testvalue'
+        }
+      });
+      expect(errors).to.be.empty; // eslint-disable-line
+      done();
+    });
+    it('return errors', (done) => {
+      const errors = utils.validateConfig({});
+      expect(errors).to.not.be.empty; //eslint-disable-line
+      done();
+    });
   });
 });
+
