@@ -22,25 +22,25 @@ const validateConfig = function validateConfig(config) {
       },
       user: {
         company: {
-          type: 'bool'
+          type: 'boolean'
         },
         blog: {
-          type: 'bool'
+          type: 'boolean'
         },
         location: {
-          type: 'bool'
+          type: 'boolean'
         },
         bio: {
-          type: 'bool'
+          type: 'boolean'
         },
         public_repos: {
-          type: 'bool'
+          type: 'boolean'
         },
         public_gists: {
-          type: 'bool'
+          type: 'boolean'
         },
         followers: {
-          type: 'bool'
+          type: 'boolean'
         }
       }
     }
