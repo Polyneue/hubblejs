@@ -1,5 +1,6 @@
 // Dependencies
 const expect = require('chai').expect;
+const assert = require('chai').assert;
 const utils = require('../libs/utilities.js');
 const Hubble = require('../index.js');
 
@@ -16,17 +17,18 @@ describe('Hubble.js', () => {
 
   // Config Validation
   describe('utils.validateConfig()', () => {
-    it('should return an empty error array', (done) => {
-      const errors = utils.validateConfig({
-        github: { username: 'Polyneue', token: 'testvalue' }
-      });
-      expect(errors).to.be.empty; // eslint-disable-line
+    it('should not throw an error', (done) => {
+      expect(() => {
+        utils.validateConfig({
+          github: { username: 'test-name', token: 'test-token' }
+        });
+      }).to.not.throw();
       done();
     });
-    it('should return an error array', (done) => {
-      const errors = utils.validateConfig({});
-      expect(errors).to.not.be.empty; //eslint-disable-line
-      done();
+    it('should throw an error', () => {
+      expect(() => {
+        utils.validateConfig({});
+      }).to.throw(Error);
     });
   });
 

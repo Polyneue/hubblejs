@@ -46,7 +46,7 @@ const validateConfig = function validateConfig(config) {
     }
   });
 
-  return user.validate(config);
+  return user.assert(config);
 };
 
 module.exports = validateConfig;
