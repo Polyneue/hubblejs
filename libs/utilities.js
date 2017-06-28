@@ -1,6 +1,12 @@
-const validateConfig = require('./schema.js');
+// Deps
 const chalk = require('chalk');
 const timestamp = require('time-stamp');
+
+// Libs
+const validateConfig = require('./schema.js');
+const getUserData = require('./getUserData.js');
+const getProjectData = require('./getProjectData.js');
+
 
 /**
  * Formats for standard error message
@@ -16,5 +22,7 @@ const reportError = function reportError(label, error) {
 
 module.exports = {
   validateConfig,
+  getUserData,
+  getProjectData,
   reportError
 };

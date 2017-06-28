@@ -1,10 +1,13 @@
-const utils = require('./libs/utilities.js');
-const git = require('./libs/github.js');
+// Deps
 const async = require('async');
 const Github = require('github');
 const chalk = require('chalk'); // DEBUG
 
+// Libs
+const utils = require('./libs/utilities.js');
+
 const log = console.log; // eslint-disable-line
+
 const gh = new Github({
   // debug: true,
   header: {
@@ -30,66 +33,28 @@ const Hubble = function hubble(config) {
     token: this.config.github.token
   });
 
-  console.log(chalk.yellow('INITIALIZE CONFIG'), this.config); // DEBUG
+  log(chalk.yellow('======== INITIALIZE CONFIG ======== \n'), this.config); // DEBUG
 };
 
-
-// TODO this should not be exposed via the hubble API
-// Async.parallel could handle this inside the generate site
-// Function.
-Hubble.prototype.getData = function getData(callback) {
-  const self = this;
-  async.parallel({
-    // Get User Data
-    getUserData(cb) {
-      git.getUserData(gh, self, (data) => {
-        cb(null, data);
-      });
-    },
-    getProjectData(cb) {
-      git.getProjectData(gh, self, (data) => {
-        cb(null, data);
-      });
-    }
-  }, function done(err, data) {
-    // Format Data
-    const formattedData = {};
-    formattedData.userData = data.getUserData;
-    formattedData.projectData = data.getProjectData;
-    self.templateData = formattedData;
-    
-    return callback('getDataDone');
-  });
-};
-
-// Hubble.prototype.createDirectories = function createDirectories() {
-//   // Debug
-//   console.log('\n');
-//   console.log('============= Directories ==============');
-//   console.log('Create Directorioes');
-// };
-
-// Hubble.prototype.renderTemplates = function renderTemplates() {
-//   // Run Templating Engine
-// };
-
+/**
+ * Generates and renders the Hubble site with Github data.
+ * @public
+ */
 Hubble.prototype.generateSite = function generateSite() {
   const self = this;
 
-  async.series([
-    function getGithubData(callback) {
-      self.getData(function cb(msg) {
-        callback(null, msg);
-      });
+  async.series({
+    userData(cb) {
+      utils.getUserData(gh, self, data => cb(null, data));
+    },
+    projectData(cb) {
+      utils.getProjectData(gh, self, data => cb(null, data));
     }
-  ], function complete(err, res) {
+  }, function complete(err, res) {
     if (err) throw Error(err);
-    console.dir(self.templateData.projectData);
-    console.dir(self);
+    self.templateData = res;
+    log(chalk.yellow('======== TEMPLATE DATA ======== \n'), self.templateData); // DEBUG
   });
-
-  // Create Project Directories
-  // this.createDirectories();
   
   // Run Templating Engine
   // Done!
