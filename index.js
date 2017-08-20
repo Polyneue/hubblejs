@@ -1,63 +1,53 @@
-// Deps
-const async = require('async');
-const Github = require('github');
-const chalk = require('chalk'); // DEBUG
-
-// Libs
-const utils = require('./libs/utilities.js');
+const validateConfig = require('./libs/validateConfig.js');
+const queryGithub = require('./libs/queryGithub.js');
+const createQuery = require('./libs/createQuery.js');
+const renderTemplate = require('./libs/renderTemplate.js');
 
 const log = console.log; // eslint-disable-line
-
-const gh = new Github({
-  // debug: true,
-  header: {
-    'user-agent': 'Pages-Test'
-  },
-  followRedirects: false,
-  timeout: 5000
-});
 
 /**
  * Construct Hubble - validate and assign
  * @param {Object} config - configuration object for Hubble
+ * @return self
  */
+// TODO: We don't need the Hubble instance in order to generate a site...
 const Hubble = function hubble(config) {
   // Validate the config
-  utils.validateConfig(config);
+  validateConfig(config);
 
   // If the config is valid add it to Hubble
   this.config = Object.freeze(config);
 
-  gh.authenticate({
-    type: 'token',
-    token: this.config.github.token
-  });
+  log('======== INITIALIZE CONFIG ======== \n', this.config);
 
-  log(chalk.yellow('======== INITIALIZE CONFIG ======== \n'), this.config); // DEBUG
+  return this;
 };
 
 /**
  * Generates and renders the Hubble site with Github data.
  * @public
  */
-Hubble.prototype.generateSite = function generateSite() {
-  const self = this;
+Hubble.prototype.generateSite = async function generateSite() {
+  // Validate the site first
+  const config = this.config.github;
 
-  async.series({
-    userData(cb) {
-      utils.getUserData(gh, self, data => cb(null, data));
-    },
-    projectData(cb) {
-      utils.getProjectData(gh, self, data => cb(null, data));
-    }
-  }, function complete(err, res) {
-    if (err) throw Error(err);
-    self.templateData = res;
-    log(chalk.yellow('======== TEMPLATE DATA ======== \n'), self.templateData); // DEBUG
-  });
-  
-  // Run Templating Engine
-  // Done!
+  try {
+    const query = await createQuery(config);
+    const ghData = await queryGithub(config, query);
+    log('======== TEMPLATE DATA ======== \n'); // DEBUG
+    console.dir(ghData);
+
+    // TODO: handle when the config has a custom theme path
+    renderTemplate(ghData.data, `${__dirname}/libs/template.html`);
+  } catch (err) {
+    throw err;
+  }
 };
+
+// Logical Steps
+// 1. Validate the config that hubble receives
+// 2. Get the github data based on config
+// 3. Transform that data into the format best suited for templating
+// 4. Generate template with data
 
 module.exports = Hubble;
