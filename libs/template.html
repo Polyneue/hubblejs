@@ -1,11 +1,52 @@
+{{!--*
+  * @template: Hubble Default
+  * @author: Polyneue
+  * @version: 0.0.1
+  --}}
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    
+    {{!-- Title Tag --}}
+    {{#if meta.title}}<title>{{meta.title}}</title>{{/if}}
+
+    {{!-- Page Description --}}
+    {{#if meta.description}}<meta name="description" content="{{meta.description}}">{{/if}}
+
+    {{!-- Favicon Support --}}
+    {{#if meta.favicon}}
+        <link rel="shortcut icon" href="{{meta.favicon}}" type="image/x-icon">
+        <link rel="icon" href="{{meta.favicon}}" type="image/x-icon">
+    {{/if}}
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <h1>{{ user.name }}</h1>
+    <h1>Name = {{user.name}}</h1>
+    <div>
+        <p>user.avatarUrl = </p>
+        <img src="{{user.avatarUrl}}" alt="{{user.name}}">
+    </div>
+    <p>Bio = {{user.bio}}</p>
+    <p>Company = {{user.company}}</p>
+    <p>Location = {{user.location}}</p>
+    <p>Followers Count = {{user.followers.totalCount}}</p>
+    <p>Gists Count = {{user.gists.totalCount}}</p>
+    <p>Repository Count = {{user.repositories.totalCount}}</p>
+    {{#each user.repositories.edges}}
+        <ul>
+            <li>Repository Owner ID = {{this.node.owner.id}}</li>
+            <li>Repository Name = {{this.node.name}}</li>
+            <li>Repsotiry Description = {{this.node.description}}</li>
+            <li>Repository Url = {{this.node.url}}</li>
+            <li>Repository HomePage Url = {{this.node.homepageUrl}}</li>
+            <li>Repository Id = {{this.node.id}}</li>
+            <li>Repository Primary Language = {{this.node.primaryLanguage.name}}</li>
+            <li>Repository Pushed At = {{this.node.pushedAt}}</li>
+        </ul>
+    {{/each}}
 </body>
 </html>

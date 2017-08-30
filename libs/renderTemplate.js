@@ -14,7 +14,7 @@ const loadTemplate = async function loadTemplate(source) {
       const template = Handlebars.compile(src);
       resolve(template);
     } catch (err) {
-      reject(err);
+      reject(`Failed to load template - ${err.stack}`);
     }
   });
 };
@@ -38,7 +38,7 @@ const renderTemplate = async function renderTemplate(data, source) {
 
       resolve('Success!');
     } catch (err) {
-      reject(err);
+      reject(`Failed to render template - ${err.stack}`);
     }
   });
 };

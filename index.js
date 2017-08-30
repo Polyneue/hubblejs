@@ -2,52 +2,38 @@ const validateConfig = require('./libs/validateConfig.js');
 const queryGithub = require('./libs/queryGithub.js');
 const createQuery = require('./libs/createQuery.js');
 const renderTemplate = require('./libs/renderTemplate.js');
-
-const log = console.log; // eslint-disable-line
-
-/**
- * Construct Hubble - validate and assign
- * @param {Object} config - configuration object for Hubble
- * @return self
- */
-// TODO: We don't need the Hubble instance in order to generate a site...
-const Hubble = function hubble(config) {
-  // Validate the config
-  validateConfig(config);
-
-  // If the config is valid add it to Hubble
-  this.config = Object.freeze(config);
-
-  log('======== INITIALIZE CONFIG ======== \n', this.config);
-
-  return this;
-};
+const log = require('./libs/log.js');
 
 /**
- * Generates and renders the Hubble site with Github data.
- * @public
+ * Site Generation
+ * @param {Object} config - hubble config
+ * @param {String} theme - path to theme file
  */
-Hubble.prototype.generateSite = async function generateSite() {
-  // Validate the site first
-  const config = this.config.github;
+const generateSite = async function generateSite(config, theme) {
+  const template = theme || `${__dirname}/libs/template.html`;
 
   try {
-    const query = await createQuery(config);
-    const ghData = await queryGithub(config, query);
-    log('======== TEMPLATE DATA ======== \n'); // DEBUG
-    console.dir(ghData);
+    // Validate the config
+    await validateConfig(config);
+    const gh = config.github;
 
-    // TODO: handle when the config has a custom theme path
-    renderTemplate(ghData.data, `${__dirname}/libs/template.html`);
+    // Query Github
+    const query = await createQuery(gh);
+    const res = await queryGithub(gh, query);
+
+    // Add meta to the res data
+    if (config.meta) res.data.meta = config.meta;
+
+    // Render Template
+    await renderTemplate(res.data, template);
+    
+    log('Success', 'Rendered Hubble template');
   } catch (err) {
-    throw err;
+    log('Error', err);
   }
 };
 
-// Logical Steps
-// 1. Validate the config that hubble receives
-// 2. Get the github data based on config
-// 3. Transform that data into the format best suited for templating
-// 4. Generate template with data
-
-module.exports = Hubble;
+module.exports = {
+  queryGithub,
+  generateSite
+};

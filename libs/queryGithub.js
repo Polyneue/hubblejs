@@ -20,7 +20,7 @@ const queryGithub = function queryGithub(config, query) {
       body: query,
       json: true
     }, function callback(err, res, body) {
-      if (err) reject(err);
+      if (err) reject(`Failed to retrieve data from Github - ${JSON.stringify(err)}`);
       resolve(body);
     });
   });
