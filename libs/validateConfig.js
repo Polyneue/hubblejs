@@ -3,8 +3,6 @@
  * @param {Object} config - config to validate
  * @return {Promise} valid config or error
  * @private
- * @TODO: Write the other test cases to check for strings
- * @TODO: Write unit test
  */
 const validateConfig = function validateConfig(config) {
   return new Promise(function promise(resolve, reject) {

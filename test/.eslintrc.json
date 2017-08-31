@@ -10,7 +10,8 @@
   "rules": {
     "prefer-arrow-callback": "off",
     "comma-dangle": "off",
-    "func-names": ["error", "as-needed"],
-    "no-underscore-dangle": "off"
+    "func-names": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off"
   }
 }
