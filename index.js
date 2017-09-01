@@ -14,22 +14,23 @@ const generateSite = async function generateSite(config, theme) {
 
   try {
     // Validate the config
+    log('', 'Validating config...');
     await validateConfig(config);
     const gh = config.github;
 
     // Query Github
-    const query = await createQuery(gh);
+    log('', 'Fetching Github data...');
+    const query = createQuery(gh);
     const res = await queryGithub(gh, query);
 
-    // Add meta to the res data
-    if (config.meta) res.data.meta = config.meta;
-
     // Render Template
+    log('', 'Rendering data to template');
+    if (config.meta) res.data.meta = config.meta;
     await renderTemplate(res.data, template);
-    
-    log('Success', 'Rendered Hubble template');
+
+    log('Success:', `Rendered Hubble template for ${gh.username}`, true);
   } catch (err) {
-    log('Error', err);
+    log('Error:', err, true);
   }
 };
 
