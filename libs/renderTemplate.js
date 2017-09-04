@@ -1,3 +1,5 @@
+const path = require('path');
+const mkdirp = require('mkdirp');
 const Handlebars = require('handlebars');
 const fs = require('fs');
 
@@ -5,42 +7,38 @@ const fs = require('fs');
  * Parse the source into a Handlebars template
  * @param {String} source - path to template for rendering
  * @return {Function} Handlebars template fn
- * @TODO: write unit test
+ * @private
  */
 const loadTemplate = async function loadTemplate(source) {
-  return new Promise(async function promise(resolve, reject) {
-    try {
-      const src = await fs.readFileSync(source, 'utf8');
-      const template = Handlebars.compile(src);
-      resolve(template);
-    } catch (err) {
-      reject(`Failed to load template - ${err.stack}`);
-    }
-  });
+  try {
+    const src = await fs.readFileSync(source, 'utf8');
+    const template = Handlebars.compile(src);
+    return template;
+  } catch (err) {
+    throw err;
+  }
 };
 
 /**
  * Parse, render, and write static html file to the file system
  * @param {Object} data - Data to be rendered into template
  * @param {String} source - path to template for rendering
+ * @param {String} output - path to output file
  * @return {String} success message
- * @TODO: write unit test
  */
-const renderTemplate = async function renderTemplate(data, source) {
-  return new Promise(async function promise(resolve, reject) {
-    try {
-      const template = await loadTemplate(source);
-      const html = template(data);
-      
-      await fs.writeFile('./index.html', html, 'utf8', function callback(err) {
-        if (err) throw err;
-      });
+const renderTemplate = async function renderTemplate(data, source, output) {
+  try {
+    const template = await loadTemplate(source);
+    const html = template(data);
+    const dir = path.dirname(output);
 
-      resolve('Success!');
-    } catch (err) {
-      reject(`Failed to render template - ${err.stack}`);
-    }
-  });
+    await mkdirp(dir);
+    await fs.writeFileSync(output, html, 'utf8');
+
+    return 'Success';
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = renderTemplate;

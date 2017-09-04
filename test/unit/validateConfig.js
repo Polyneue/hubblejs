@@ -14,7 +14,9 @@ describe('validateConfig()', function () {
     const testConfig = JSON.parse(JSON.stringify(config));
     testConfig.github.username = false;
     validateConfig(testConfig).catch(function (err) {
-      expect(err).to.contain('Github username required in Hubble config.');
+      expect(err).to.exist;
+      expect(err).to.be.an.instanceof(Error);
+      expect(err.message).to.contain('Github username required in Hubble config.');
       done();
     });
   });
@@ -23,7 +25,9 @@ describe('validateConfig()', function () {
     const testConfig = JSON.parse(JSON.stringify(config));
     testConfig.github.token = false;
     validateConfig(testConfig).catch(function (err) {
-      expect(err).to.contain('Github auth token required in Hubble config.');
+      expect(err).to.exist;
+      expect(err).to.be.an.instanceof(Error);
+      expect(err.message).to.contain('Github auth token required in Hubble config.');
       done();
     });
   });

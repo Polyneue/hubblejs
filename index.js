@@ -8,9 +8,11 @@ const log = require('./libs/log.js');
  * Site Generation
  * @param {Object} config - hubble config
  * @param {String} theme - path to theme file
+ * @param {String} file - path to output file
  */
-const generateSite = async function generateSite(config, theme) {
+const generateSite = async function generateSite(config, theme, file) {
   const template = theme || `${__dirname}/libs/template.html`;
+  const output = file || './index.html';
 
   try {
     // Validate the config
@@ -26,11 +28,11 @@ const generateSite = async function generateSite(config, theme) {
     // Render Template
     log('', 'Rendering data to template');
     if (config.meta) res.data.meta = config.meta;
-    await renderTemplate(res.data, template);
+    await renderTemplate(res.data, template, output);
 
-    log('Success:', `Rendered Hubble template for ${gh.username}`, true);
+    log('Success:', `Rendered Hubble template for ${gh.username} at ${output}`, true);
   } catch (err) {
-    log('Error:', err, true);
+    log('Error:', err.stack, true);
   }
 };
 
