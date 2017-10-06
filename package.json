@@ -28,8 +28,8 @@
     "chai": "^4.0.2",
     "coveralls": "^2.13.1",
     "eslint": "^4.6.1",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.6.0",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-plugin-import": "^2.7.0",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "^3.5.0",
     "nock": "^9.0.13"

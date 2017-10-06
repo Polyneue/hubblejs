@@ -6,7 +6,6 @@ const request = require('request');
  * @param {Object} query - GraphQL formatted query
  * @return {Promise} response from Github API
  * @public
- * @TODO: write unit test
  */
 const queryGithub = function queryGithub(config, query) {
   return new Promise(function promise(resolve, reject) {
@@ -20,7 +19,7 @@ const queryGithub = function queryGithub(config, query) {
       body: query,
       json: true
     }, function callback(err, res, body) {
-      if (err) reject(`Failed to retrieve data from Github - ${JSON.stringify(err)}`);
+      if (err) reject(new Error(`Failed to retrieve data from Github - ${JSON.stringify(err)}`));
       resolve(body);
     });
   });
