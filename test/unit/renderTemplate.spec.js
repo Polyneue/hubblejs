@@ -3,6 +3,7 @@ const path = require('path');
 const { expect, templateData, errHandler } = require('../utilities.js');
 const renderTemplate = require('../../libs/renderTemplate.js');
 
+// Render Template
 describe('renderTemplate()', function () {
   const absPath = __dirname.split('test')[0];
   const output = path.join(absPath, 'test/fixtures/index.test.html');

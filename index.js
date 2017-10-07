@@ -11,7 +11,7 @@ const log = require('./libs/log.js');
  * @param {String} file - path to output file
  */
 const generateSite = async function generateSite(config, theme, file) {
-  const template = theme || `${__dirname}/libs/template.html`;
+  const template = theme || `${__dirname}/node_modules/hubblejs-default-theme/index.html`;
   const output = file || './index.html';
 
   try {

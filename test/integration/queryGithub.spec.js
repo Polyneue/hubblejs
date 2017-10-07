@@ -3,6 +3,7 @@ const nock = require('nock');
 const createQuery = require('../../libs/createQuery');
 const queryGithub = require('../../libs/queryGithub');
 
+// Query Github
 describe('queryGithub()', function () {
   const query = createQuery(config.github);
   const response = {
@@ -17,7 +18,7 @@ describe('queryGithub()', function () {
         .post('/graphql')
         .reply(200, response);
     });
-  
+
     it('resolve with data from the Github API', function () {
       return queryGithub(config, query).then(function (res) {
         expect(res).to.have.property('data');
