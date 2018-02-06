@@ -6,6 +6,9 @@ const formatData = require('./libs/formatData.js');
 const renderTemplate = require('./libs/renderTemplate.js');
 const log = require('./libs/log.js');
 
+// Default Theme location
+const defaultTheme = path.join(__dirname, 'node_modules', 'hubblejs-default-theme', 'index.ejs');
+
 /**
  * Site Generation
  * @param {Object} config - hubble config
@@ -13,7 +16,7 @@ const log = require('./libs/log.js');
  * @param {String} file - path to output file
  */
 const generateSite = async function generateSite(config, enrichment) {
-  const template = config.source || path.join(__dirname, 'theme', 'index.ejs');
+  const template = config.source || defaultTheme;
   const output = config.output || path.join('.', 'index.html');
 
   try {
