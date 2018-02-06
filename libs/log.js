@@ -7,7 +7,10 @@ const chalk = require('chalk');
  * @param {Bool} newline - add a new line after message
  */
 const log = function log(type, message, newline) {
-  const highlight = (type === 'Error:') ? chalk.red : chalk.green;
+  let highlight = chalk.blue;
+  if (type === 'Error:') highlight = chalk.red;
+  if (type === 'Success:') highlight = chalk.green;
+
   const msg = [
     chalk.yellow('[Hubble.js]'),
     highlight(type),

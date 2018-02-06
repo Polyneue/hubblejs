@@ -1,18 +1,23 @@
 const path = require('path');
 const mkdirp = require('mkdirp');
-const Handlebars = require('handlebars');
+const ejs = require('ejs');
 const fs = require('fs');
 
 /**
  * Parse the source into a Handlebars template
  * @param {String} source - path to template for rendering
+ * @param {Bool} default - whether the template is hubblejs
  * @return {Function} Handlebars template fn
  * @private
  */
 const loadTemplate = async function loadTemplate(source) {
+  let sourcePath = path.resolve(source);
+  sourcePath = path.dirname(sourcePath);
+
   try {
     const src = await fs.readFileSync(source, 'utf8');
-    const template = Handlebars.compile(src);
+    const template = ejs.compile(src, { root: sourcePath });
+
     return template;
   } catch (err) {
     throw err;

@@ -14,10 +14,19 @@ const createQuery = function createQuery(user) {
         bio
         company
         location
+        websiteUrl
         followers { totalCount }
-        gists { totalCount }
-
-        repositories(first: 20 privacy: PUBLIC) {
+        gists(first:8 privacy:PUBLIC orderBy: { field:CREATED_AT, direction:DESC}) {
+          totalCount
+          edges {
+            node {
+              name
+              description
+              pushedAt
+            }
+          }
+        }
+        repositories(first: 12 privacy: PUBLIC orderBy: { field: UPDATED_AT, direction: DESC }) {
           totalCount
           edges {
             node {
@@ -27,7 +36,10 @@ const createQuery = function createQuery(user) {
               url
               homepageUrl
               id
-              primaryLanguage { name }
+              primaryLanguage {
+                name
+                color
+              }
               pushedAt
             }
           }

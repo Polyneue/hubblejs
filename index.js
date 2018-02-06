@@ -1,6 +1,8 @@
+const path = require('path');
 const validateConfig = require('./libs/validateConfig.js');
 const queryGithub = require('./libs/queryGithub.js');
 const createQuery = require('./libs/createQuery.js');
+const formatData = require('./libs/formatData.js');
 const renderTemplate = require('./libs/renderTemplate.js');
 const log = require('./libs/log.js');
 
@@ -10,29 +12,33 @@ const log = require('./libs/log.js');
  * @param {String} theme - path to theme file
  * @param {String} file - path to output file
  */
-const generateSite = async function generateSite(config, theme, file) {
-  const template = theme || `${__dirname}/node_modules/hubblejs-default-theme/index.html`;
-  const output = file || './index.html';
+const generateSite = async function generateSite(config, enrichment) {
+  const template = config.source || path.join(__dirname, 'theme', 'index.ejs');
+  const output = config.output || path.join('.', 'index.html');
 
   try {
     // Validate the config
-    log('', 'Validating config...');
+    log('Info:', 'Validating config');
     await validateConfig(config);
     const gh = config.github;
 
     // Query Github
-    log('', 'Fetching Github data...');
+    log('Info:', 'Fetching Github data');
     const query = createQuery(gh);
     const res = await queryGithub(gh, query);
 
+    // Format Data
+    log('Info:', 'Formatting data');
+    const data = formatData(res.data, config, enrichment);
+
     // Render Template
-    log('', 'Rendering data to template');
-    if (config.meta) res.data.meta = config.meta;
-    await renderTemplate(res.data, template, output);
+    log('Info:', 'Rendering data to template');
+    await renderTemplate(data, template, output);
 
     log('Success:', `Rendered Hubble template for ${gh.username} at ${output}`, true);
   } catch (err) {
-    log('Error:', err.stack, true);
+    log('Error:', 'Uh Oh... Somethings gone wrong:');
+    throw err;
   }
 };
 
