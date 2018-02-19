@@ -1,37 +1,51 @@
 const fs = require('fs');
 const path = require('path');
-const { expect, templateData, errHandler } = require('../utilities.js');
+const { expect, config } = require('../utilities.js');
 const renderTemplate = require('../../libs/renderTemplate.js');
 
+const { output } = config;
+
 // Render Template
-describe('renderTemplate()', function () {
-  const absPath = __dirname.split('test')[0];
-  const output = path.join(absPath, 'test/fixtures/index.test.html');
+describe('# renderTemplate()', function () {
+  let data;
 
-  it('resolves with a successfully rendered template', function () {
-    const template = path.join(absPath, 'test/fixtures/template.test.html');
-    return renderTemplate(templateData, template, output).then(function () {
-      expect(fs.existsSync(output)).to.be.true;
-    });
+  // Load in fixture data
+  before(async function () {
+    data = await fs.readFileSync('./test/fixtures/formattedData.json', { encoding: 'utf8' });
+    data = JSON.parse(data);
   });
 
-  it('rejects when no template is found ', function () {
-    const template = path.join(absPath, 'test/fixtures/template.not.html');
-    return renderTemplate(templateData, template, output).catch(function (err) {
-      expect(err).to.exist;
+  // Handles the default template
+  it('resolves when using the default template', async function () {
+    await renderTemplate(data, false, output);
+
+    // Verify output
+    const result = await fs.existsSync(output);
+    expect(result).to.be.true;
+  });
+
+  // Handles a custom render function template
+  it('resolves when using a render function', async function () {
+    const test = `${path.dirname(output)}/index-2.html`;
+    const template = function (dataObj) {
+      return `<p>${dataObj.user.name}'s custom template fn.</p>`;
+    };
+
+    await renderTemplate(data, template, test);
+
+    // Verify output
+    const result = await fs.existsSync(test);
+    expect(result).to.be.true;
+  });
+
+  // Handles when a the render function is invalid
+  it('rejects when the template is not a function', async function () {
+    const test = `${path.dirname(output)}/index-3.html`;
+    try {
+      await renderTemplate(data, 'test', test);
+    } catch (err) {
       expect(err).to.be.an.instanceof(Error);
-    });
-  });
-
-  it('rejects when an invalid template it used', function () {
-    const template = path.join(absPath, 'test/fixtures/template.fail.test.html');
-    return renderTemplate(templateData, template, output).catch(function (err) {
-      expect(err).to.exist;
-      expect(err).to.be.an.instanceof(Error);
-    });
-  });
-
-  after(function () {
-    fs.unlink(output, errHandler);
+      expect(err.message).to.contain('Template must be a function');
+    }
   });
 });

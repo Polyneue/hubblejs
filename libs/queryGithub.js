@@ -1,20 +1,72 @@
 const request = require('request');
 
 /**
- * Make request to the Github API
- * @param {Object} config - Hubble config that contains auth token
- * @param {Object} query - GraphQL formatted query
- * @return {Promise} response from Github API
- * @public
+ * Return the constructed Github GraphQL query
+ * @param {Object} user - user data for github
+ * @return {Object} formatted GraphQL query
+ * @private
  */
-const queryGithub = function queryGithub(config, query) {
+const createQuery = function (username) {
+  return {
+    query: `{
+      user(login: "${username}") {
+        name
+        avatarUrl(size:256)
+        url
+        bio
+        company
+        location
+        websiteUrl
+        followers { totalCount }
+        gists(first:8 privacy:PUBLIC orderBy: { field:CREATED_AT, direction:DESC}) {
+          totalCount
+          edges {
+            node {
+              name
+              description
+              pushedAt
+            }
+          }
+        }
+        repositories(first: 12 privacy: PUBLIC orderBy: { field: UPDATED_AT, direction: DESC }) {
+          totalCount
+          edges {
+            node {
+              owner { id }
+              name
+              description
+              url
+              homepageUrl
+              id
+              primaryLanguage {
+                name
+                color
+              }
+              pushedAt
+            }
+          }
+        }
+      }
+    }`
+  };
+};
+
+/**
+ * Make request to the Github API
+ * @param {Object} username - Github username
+ * @param {Object} token - Github personal access token
+ * @return {Promise} response from Github API
+ */
+const queryGithub = function queryGithub(username, token) {
+  const query = createQuery(username);
+
   return new Promise(function promise(resolve, reject) {
     request({
       method: 'POST',
       url: 'https://api.github.com/graphql',
       headers: {
         'User-Agent': 'hubblejs',
-        Authorization: `bearer ${config.token}`
+        Authorization: `bearer ${token}`
       },
       body: query,
       json: true

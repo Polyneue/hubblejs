@@ -1,10 +1,15 @@
 const { expect } = require('chai');
-const config = require('./fixtures/config.test.json');
-const templateData = require('./fixtures/data.test.json');
+const getenv = require('getenv');
 
-/**
- * Simple error handler for callbacks
- */
+const config = {
+  username: getenv('GH_USER_NAME'),
+  token: getenv('GH_ACCESS_TOKEN'),
+  repositories: [],
+  theme: {},
+  output: './test/fixtures/dist/index.html'
+};
+
+// Simple error handler for callbacks
 function errHandler(err) {
   if (err) throw err;
 }
@@ -12,6 +17,5 @@ function errHandler(err) {
 module.exports = {
   expect,
   config,
-  templateData,
   errHandler
 };

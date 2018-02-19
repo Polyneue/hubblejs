@@ -9,7 +9,8 @@
   "rules": {
     "prefer-arrow-callback": "off",
     "comma-dangle": "off",
-    "func-names": ["error", "as-needed"],
-    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true } ]
+    "func-names": "off",
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true } ],
+    "object-curly-newline": "off"
   }
 }

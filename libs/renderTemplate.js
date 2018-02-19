@@ -1,46 +1,40 @@
 const path = require('path');
-const mkdirp = require('mkdirp');
-const ejs = require('ejs');
+const mkdirp = require('mkdirp-promise');
 const fs = require('fs');
-
-/**
- * Parse the source into a Handlebars template
- * @param {String} source - path to template for rendering
- * @param {Bool} default - whether the template is hubblejs
- * @return {Function} Handlebars template fn
- * @private
- */
-const loadTemplate = async function loadTemplate(source) {
-  let sourcePath = path.resolve(source);
-  sourcePath = path.dirname(sourcePath);
-
-  try {
-    const src = await fs.readFileSync(source, 'utf8');
-    const template = ejs.compile(src, { root: sourcePath });
-
-    return template;
-  } catch (err) {
-    throw err;
-  }
-};
+const hubbleJsTheme = require('hubblejs-default-theme');
+const { minify } = require('html-minifier');
 
 /**
  * Parse, render, and write static html file to the file system
- * @param {Object} data - Data to be rendered into template
- * @param {String} source - path to template for rendering
+ * @param {Object} data - data to be rendered into template
+ * @param {Function} template - template function
  * @param {String} output - path to output file
- * @return {String} success message
+ * @return {Promise} resolve/rejected
  */
-const renderTemplate = async function renderTemplate(data, source, output) {
-  try {
-    const template = await loadTemplate(source);
-    const html = template(data);
-    const dir = path.dirname(output);
+const renderTemplate = async function (data, template, output) {
+  const render = template || hubbleJsTheme;
+  const dir = path.dirname(output);
 
+  // Validate Template by checking if it's not a function
+  if (typeof render !== 'function') {
+    throw new Error('Template must be a function.');
+  }
+
+  try {
+    let html = await render(data);
+
+    // Minify HTML
+    html = minify(html, {
+      minifyCSS: true,
+      minifyJS: true,
+      collapseWhitespace: true
+    });
+
+    // Write HTML
     await mkdirp(dir);
     await fs.writeFileSync(output, html, 'utf8');
 
-    return 'Success';
+    return;
   } catch (err) {
     throw err;
   }

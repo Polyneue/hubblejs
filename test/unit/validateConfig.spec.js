@@ -2,30 +2,34 @@ const { expect, config } = require('../utilities.js');
 const validateConfig = require('../../libs/validateConfig.js');
 
 // Validate Config
-describe('validateConfig()', function () {
-  it('should pass validation', function () {
-    return validateConfig(config).then(function (valid) {
-      expect(valid).to.be.true;
-    });
+describe('# validateConfig()', function () {
+  it('passes with a valid config', function (done) {
+    const result = validateConfig(config);
+    expect(result).to.be.an('object');
+    expect(result).to.have.property('username');
+    expect(result).to.have.property('token');
+    done();
   });
 
-  it('should fail validation due to missing username', function () {
-    const testConfig = JSON.parse(JSON.stringify(config));
-    testConfig.github.username = false;
-    return validateConfig(testConfig).catch(function (err) {
-      expect(err).to.exist;
+  // Handles invalid username
+  it('fails with an invalid username', function (done) {
+    try {
+      validateConfig({ token: 'GH_ACCESS_TOKEN' });
+    } catch (err) {
       expect(err).to.be.an.instanceof(Error);
-      expect(err.message).to.contain('Github username required in Hubble config.');
-    });
+      expect(err.message).to.contain('config.username required in Hubble config.');
+      done();
+    }
   });
 
-  it('should fail validation due to missing token', function () {
-    const testConfig = JSON.parse(JSON.stringify(config));
-    testConfig.github.token = false;
-    return validateConfig(testConfig).catch(function (err) {
-      expect(err).to.exist;
+  // Handles invalid token
+  it('fails with an invalid token', function (done) {
+    try {
+      validateConfig({ username: 'GH_USER_NAME' });
+    } catch (err) {
       expect(err).to.be.an.instanceof(Error);
-      expect(err.message).to.contain('Github auth token required in Hubble config.');
-    });
+      expect(err.message).to.contain('config.token required in Hubble config.');
+      done();
+    }
   });
 });

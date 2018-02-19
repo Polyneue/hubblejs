@@ -1,11 +1,17 @@
 /**
  * Transform the data into a more intuitive format
- * @param {Object} data - data from Github and config
+ * @param {Object} data - data from Github
+ * @param {Object} config - configuration object
+ * @return {Object} formatted data
  */
-const formatData = function formatData(data, config, enrichment) {
+const formatData = function (data, config) {
   // Break down data for transformation
   const { user } = data;
-  const { meta, theme, github } = config;
+  const { theme } = config;
+  const featuredRepositories = config.repositories;
+
+  // Assign username
+  user.username = config.username;
 
   // Reformat repository data
   let repositories = user.repositories.edges.map(function format(repo) {
@@ -20,27 +26,19 @@ const formatData = function formatData(data, config, enrichment) {
   delete user.gists.edges;
 
   // If repositories are specified, filter in only the required ones
-  if (github.repositories && github.repositories.length > 0) {
+  if (featuredRepositories && featuredRepositories.length > 0) {
     repositories = repositories.filter(function filter(repository) {
-      return github.repositories.indexOf(repository.name) >= 0;
+      return featuredRepositories.indexOf(repository.name) >= 0;
     });
   }
 
-  // Handle Data Enrichment
-  let enrichedData = {
+  // Return transformed data
+  return {
     user,
     repositories,
     gists,
-    meta,
-    theme,
-    github
+    theme
   };
-
-  if (enrichment && typeof enrichment === 'function') {
-    enrichedData = enrichment(enrichedData);
-  }
-
-  return enrichedData;
 };
 
 module.exports = formatData;
