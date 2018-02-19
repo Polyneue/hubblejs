@@ -1,5 +1,5 @@
 const fs = require('fs');
-const mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp-promise');
 const { config } = require('./utilities');
 const queryGithub = require('../libs/queryGithub');
 const formatData = require('../libs/formatData');
