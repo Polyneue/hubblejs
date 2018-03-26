@@ -28,7 +28,7 @@ const createQuery = function (username) {
             }
           }
         }
-        repositories(first: 12 privacy: PUBLIC orderBy: { field: UPDATED_AT, direction: DESC }) {
+        repositories(first: 12 privacy: PUBLIC affiliations: OWNER orderBy: { field: UPDATED_AT, direction: DESC }) {
           totalCount
           edges {
             node {
