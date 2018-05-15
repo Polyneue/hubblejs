@@ -11,7 +11,18 @@ const log = console.log; // eslint-disable-line
  * @param {Object} config - Hubble configuration
  */
 const Hubble = function (config) {
+  // Validate username and token
   this.config = validateConfig(config);
+
+  // Assign output if none exists
+  if (!this.config.output) {
+    this.config.output = path.join('.', 'dist', 'index.html');
+  }
+
+  // Assign theme if none exists
+  if (!this.config.theme) {
+    this.config.theme = {};
+  }
 };
 
 /**
@@ -19,22 +30,18 @@ const Hubble = function (config) {
  * @param {Function} template - a render function
  */
 Hubble.prototype.generate = async function (template) {
-  // Grab information off of the Config
-  const theme = this.config.theme || {};
-  const repositories = this.config.repositories || [];
-  const output = this.config.output || path.join('.', 'dist', 'index.html');
-  const { username, token } = this.config;
+  const { output, username, theme, token, repositories, records } = this.config;
 
   // Begin generating the site
   log('[ Hubble.js ]');
 
   try {
     // Query Github
-    const res = await queryGithub(username, token);
+    let data = await queryGithub(username, token, records);
     log('[1/3] \u2713 retrieved Github data');
 
     // Format Data
-    const data = formatData(res.data, { username, repositories, theme });
+    data = formatData(data, { username, repositories, theme });
     log('[2/3] \u2713 formatted data');
 
     // Render Template

@@ -7,17 +7,20 @@
 const formatData = function (data, config) {
   // Break down data for transformation
   const { user } = data;
-  const { theme } = config;
+  const { theme, username } = config;
   const featuredRepositories = config.repositories;
 
   // Assign username
-  user.username = config.username;
+  user.username = username;
 
   // Reformat repository data
   let repositories = user.repositories.edges.map(function format(repo) {
     return repo.node;
   });
   delete user.repositories.edges;
+
+  // Reformat contribution data
+  const contributions = user.repositoriesContributedTo.nodes;
 
   // Reformat Gists
   const gists = user.gists.edges.map(function format(gist) {
@@ -27,15 +30,24 @@ const formatData = function (data, config) {
 
   // If repositories are specified, filter in only the required ones
   if (featuredRepositories && featuredRepositories.length > 0) {
-    repositories = repositories.filter(function filter(repository) {
-      return featuredRepositories.indexOf(repository.name) >= 0;
-    });
+    const repos = [];
+    for (let i = 0; i < featuredRepositories.length; i++) {
+      for (let j = 0; j < repositories.length; j++) {
+        if (repositories[j].name === featuredRepositories[i]) {
+          repos.push(repositories[j]);
+          repositories.splice(j, 1);
+          break;
+        }
+      }
+    }
+    repositories = repos;
   }
 
   // Return transformed data
   return {
     user,
     repositories,
+    contributions,
     gists,
     theme
   };

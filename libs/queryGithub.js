@@ -1,4 +1,4 @@
-const request = require('request');
+const axios = require('axios');
 
 /**
  * Return the constructed Github GraphQL query
@@ -18,7 +18,7 @@ const createQuery = function (username) {
         location
         websiteUrl
         followers { totalCount }
-        gists(first:8 privacy:PUBLIC orderBy: { field:CREATED_AT, direction:DESC}) {
+        gists(first: 100 privacy: PUBLIC orderBy: { field: CREATED_AT, direction: DESC }) {
           totalCount
           edges {
             node {
@@ -28,7 +28,7 @@ const createQuery = function (username) {
             }
           }
         }
-        repositories(first: 12 privacy: PUBLIC affiliations: OWNER orderBy: { field: UPDATED_AT, direction: DESC }) {
+        repositories(first: 100 privacy: PUBLIC affiliations: OWNER orderBy: { field: UPDATED_AT, direction: DESC }) {
           totalCount
           edges {
             node {
@@ -42,7 +42,21 @@ const createQuery = function (username) {
                 name
                 color
               }
+              stargazers {
+                totalCount
+              }
               pushedAt
+            }
+          }
+        }
+        repositoriesContributedTo(first: 100 orderBy: { field: CREATED_AT, direction: DESC } includeUserRepositories: false) {
+          totalCount
+          nodes {
+            name
+            url
+            primaryLanguage {
+              color
+              name
             }
           }
         }
@@ -57,24 +71,23 @@ const createQuery = function (username) {
  * @param {Object} token - Github personal access token
  * @return {Promise} response from Github API
  */
-const queryGithub = function queryGithub(username, token) {
+const queryGithub = async function queryGithub(username, token) {
   const query = createQuery(username);
 
-  return new Promise(function promise(resolve, reject) {
-    request({
-      method: 'POST',
+  try {
+    const response = await axios.request({
       url: 'https://api.github.com/graphql',
+      method: 'post',
       headers: {
         'User-Agent': 'hubblejs',
         Authorization: `bearer ${token}`
       },
-      body: query,
-      json: true
-    }, function callback(err, res, body) {
-      if (err) reject(new Error(`Failed to retrieve data from Github - ${JSON.stringify(err)}`));
-      resolve(body);
+      data: query
     });
-  });
+    return response.data.data;
+  } catch (err) {
+    throw new Error('Failed to retrieve data from Github');
+  }
 };
 
 module.exports = queryGithub;
