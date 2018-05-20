@@ -7,9 +7,8 @@ describe('# queryGithub()', function () {
 
   // Handles successful responses
   it('resolves with data from the Github API', async function () {
-    const res = await queryGithub(username, token);
-    expect(res).to.have.property('data');
-    expect(res.data).to.have.key('user');
+    const data = await queryGithub(username, token);
+    expect(data).to.have.key('user');
   });
 
   // Handles errors from Github

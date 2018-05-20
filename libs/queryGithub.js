@@ -11,7 +11,7 @@ const createQuery = function (username) {
     query: `{
       user(login: "${username}") {
         name
-        avatarUrl(size:256)
+        avatarUrl(size:192)
         url
         bio
         company
@@ -32,12 +32,10 @@ const createQuery = function (username) {
           totalCount
           edges {
             node {
-              owner { id }
               name
               description
               url
               homepageUrl
-              id
               primaryLanguage {
                 name
                 color
@@ -45,7 +43,6 @@ const createQuery = function (username) {
               stargazers {
                 totalCount
               }
-              pushedAt
             }
           }
         }

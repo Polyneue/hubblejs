@@ -15,11 +15,11 @@ const generateFixtures = async function () {
       await mkdirp('./test/fixtures');
 
       // Get data from Github and save it
-      const res = await queryGithub(username, token);
-      await fs.writeFileSync('./test/fixtures/githubData.json', JSON.stringify(res), 'utf8');
+      const data = await queryGithub(username, token);
+      await fs.writeFileSync('./test/fixtures/githubData.json', JSON.stringify(data), 'utf8');
 
       // Create a formatted version of that data and save it
-      const formattedData = formatData(res.data, { username, repositories, theme });
+      const formattedData = formatData(data, { username, repositories, theme });
       await fs.writeFileSync('./test/fixtures/formattedData.json', JSON.stringify(formattedData), 'utf8');
 
       resolve();
