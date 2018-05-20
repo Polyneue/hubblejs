@@ -39,7 +39,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "html-minifier": "^3.5.8",
-    "hubblejs-default-theme": "^0.0.7",
+    "hubblejs-default-theme": "0.0.8",
     "mkdirp-promise": "^5.0.1"
   }
 }
