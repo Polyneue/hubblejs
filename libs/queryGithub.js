@@ -66,7 +66,7 @@ const createQuery = function (username) {
  * Make request to the Github API
  * @param {Object} username - Github username
  * @param {Object} token - Github personal access token
- * @return {Promise} response from Github API
+ * @return {Object} response from Github API
  */
 const queryGithub = async function queryGithub(username, token) {
   const query = createQuery(username);

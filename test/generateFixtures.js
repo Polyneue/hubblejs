@@ -9,24 +9,20 @@ const log = console.log; // eslint-disable-line
 const generateFixtures = async function () {
   const { username, token, repositories, theme } = config;
 
-  return new Promise(async function (resolve, reject) {
-    try {
-      // Create Fixture directory
-      await mkdirp('./test/fixtures');
+  try {
+    // Create Fixture directory
+    await mkdirp('./test/fixtures');
 
-      // Get data from Github and save it
-      const data = await queryGithub(username, token);
-      await fs.writeFileSync('./test/fixtures/githubData.json', JSON.stringify(data), 'utf8');
+    // Get data from Github and save it
+    const data = await queryGithub(username, token);
+    fs.writeFileSync('./test/fixtures/githubData.json', JSON.stringify(data), 'utf8');
 
-      // Create a formatted version of that data and save it
-      const formattedData = formatData(data, { username, repositories, theme });
-      await fs.writeFileSync('./test/fixtures/formattedData.json', JSON.stringify(formattedData), 'utf8');
-
-      resolve();
-    } catch (err) {
-      reject(err);
-    }
-  });
+    // Create a formatted version of that data and save it
+    const formattedData = formatData(data, { username, repositories, theme });
+    fs.writeFileSync('./test/fixtures/formattedData.json', JSON.stringify(formattedData), 'utf8');
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = generateFixtures;

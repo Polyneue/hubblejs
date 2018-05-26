@@ -9,7 +9,6 @@ const { minify } = require('html-minifier');
  * @param {Object} data - data to be rendered into template
  * @param {Function} template - template function
  * @param {String} output - path to output file
- * @return {Promise} resolve/rejected
  */
 const renderTemplate = async function (data, template, output) {
   const render = template || hubbleJsTheme;
@@ -32,9 +31,7 @@ const renderTemplate = async function (data, template, output) {
 
     // Write HTML
     await mkdirp(dir);
-    await fs.writeFileSync(output, html, 'utf8');
-
-    return;
+    fs.writeFileSync(output, html, 'utf8');
   } catch (err) {
     throw err;
   }

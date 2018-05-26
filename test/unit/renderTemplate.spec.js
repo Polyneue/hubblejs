@@ -10,8 +10,8 @@ describe('# renderTemplate()', function () {
   let data;
 
   // Load in fixture data
-  before(async function () {
-    data = await fs.readFileSync('./test/fixtures/formattedData.json', { encoding: 'utf8' });
+  before(function () {
+    data = fs.readFileSync('./test/fixtures/formattedData.json', { encoding: 'utf8' });
     data = JSON.parse(data);
   });
 
@@ -20,7 +20,7 @@ describe('# renderTemplate()', function () {
     await renderTemplate(data, false, output);
 
     // Verify output
-    const result = await fs.existsSync(output);
+    const result = fs.existsSync(output);
     expect(result).to.be.true;
   });
 
@@ -34,7 +34,7 @@ describe('# renderTemplate()', function () {
     await renderTemplate(data, template, test);
 
     // Verify output
-    const result = await fs.existsSync(test);
+    const result = fs.existsSync(test);
     expect(result).to.be.true;
   });
 
