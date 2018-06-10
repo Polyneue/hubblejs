@@ -11,7 +11,7 @@ const generateFixtures = async function () {
 
   try {
     // Create Fixture directory
-    await mkdirp('./test/fixtures');
+    await mkdirp('./test/fixtures/dist/assets');
 
     // Get data from Github and save it
     const data = await queryGithub(username, token);

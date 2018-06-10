@@ -1,8 +1,4 @@
-const path = require('path');
-const mkdirp = require('mkdirp-promise');
-const fs = require('fs');
 const hubbleJsTheme = require('hubblejs-default-theme');
-const { minify } = require('html-minifier');
 
 /**
  * Parse, render, and write static html file to the file system
@@ -12,7 +8,6 @@ const { minify } = require('html-minifier');
  */
 const renderTemplate = async function (data, template, output) {
   const render = template || hubbleJsTheme;
-  const dir = path.dirname(output);
 
   // Validate Template by checking if it's not a function
   if (typeof render !== 'function') {
@@ -20,18 +15,8 @@ const renderTemplate = async function (data, template, output) {
   }
 
   try {
-    let html = await render(data);
-
-    // Minify HTML
-    html = minify(html, {
-      minifyCSS: true,
-      minifyJS: true,
-      collapseWhitespace: true
-    });
-
-    // Write HTML
-    await mkdirp(dir);
-    fs.writeFileSync(output, html, 'utf8');
+    // Call the render function from the theme
+    await render(data, output);
   } catch (err) {
     throw err;
   }

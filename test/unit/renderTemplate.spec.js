@@ -27,8 +27,9 @@ describe('# renderTemplate()', function () {
   // Handles a custom render function template
   it('resolves when using a render function', async function () {
     const test = `${path.dirname(output)}/index-2.html`;
-    const template = function (dataObj) {
-      return `<p>${dataObj.user.name}'s custom template fn.</p>`;
+    const template = function (dataObj, out) {
+      const render = `<p>${dataObj.user.name}'s custom template fn.</p>`;
+      fs.writeFileSync(out, render, 'utf8');
     };
 
     await renderTemplate(data, template, test);
