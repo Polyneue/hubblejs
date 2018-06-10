@@ -1,6 +1,6 @@
 {
   "name": "hubble.js",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A simple and scalable solution for building a static site with data from the Github API using Node.js.",
   "main": "index.js",
   "scripts": {
