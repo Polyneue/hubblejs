@@ -1,7 +1,7 @@
 {
   "name": "hubble.js",
   "version": "0.0.13",
-  "description": "A simple and scalable solution for building a static site with data from the Github API using Node.js.",
+  "description": "A customizable Node.js portfolio generator for developers that is powered by the Github API.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter spec test/*",
@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "hubblejs-default-theme": "0.0.11"
+    "hubblejs-default-theme": "^1.0.0"
   },
   "engines": {
     "node": ">=8.11.2",
