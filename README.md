@@ -43,11 +43,11 @@ const hubble = new Hubble({
 hubble.generate();
 ```
 
-Following the above steps will configure HubbleJS, generate a site useing the default theme, and output the HTML to `./dist/index.html`. Configuration properties are optional unless otherwise noted.
+Following the above steps will configure HubbleJS, generate a site using the default theme, and output the HTML to `./dist/index.html`.
 
 ## Configuration
 
-There are a number of configuration options when instantiating a new HubbleJS instance.
+There are a number of configuration options when instantiating a new HubbleJS instance. Configuration properties are optional unless otherwise noted.
 
 ```javascript
 const hubble = new Hubble({
@@ -64,9 +64,9 @@ const hubble = new Hubble({
   // The location for the generated index.html file. Default is ./dist/index.html
   output: './dist/index.html',
 
-  // The configuration fora  theme. See theme documentation for options.
+  // The configuration for a theme.
   theme: {
-      // ...
+    // ...See theme documentation for options.
   }
 });
 
@@ -99,7 +99,7 @@ npm run cover
 
 ## Style guide
 
-Hubble.js uses ESLint to validate code style, before submitting a pull request please lint files using the following command:
+HubbleJS uses ESLint to validate code style, before submitting a pull request please lint files using the following command:
 
 ```shell
 npm run lint
@@ -107,7 +107,7 @@ npm run lint
 
 ## Versioning
 
-Hubble.js uses [SemVer](http://semver.org/) for versioning. For available versions, see the [tags for this repository](/tags).
+HubbleJS uses [SemVer](http://semver.org/) for versioning. For available versions, see the [tags for this repository](/tags).
 
 ## Licensing
 
