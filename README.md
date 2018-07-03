@@ -40,7 +40,7 @@ const hubble = new Hubble({
 });
 
 // Generate the site
-hubble.generator();
+hubble.generate();
 ```
 
 Following the above steps will configure HubbleJS, generate a site useing the default theme, and output the HTML to `./dist/index.html`. Configuration properties are optional unless otherwise noted.
