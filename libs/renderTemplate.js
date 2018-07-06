@@ -14,12 +14,8 @@ const renderTemplate = async function (data, template, output) {
     throw new Error('Template must be a function.');
   }
 
-  try {
-    // Call the render function from the theme
-    await render(data, output);
-  } catch (err) {
-    throw err;
-  }
+  // Call the render function from the theme
+  await render(data, output);
 };
 
 module.exports = renderTemplate;

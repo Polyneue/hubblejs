@@ -9,6 +9,7 @@ HubbleJS is a customizable Node.js portfolio generator for developers that is po
 * Static file output, to enable hosting from anywhere
 * Personalize your Github data
 * Standardized Github response, to easily create custom templates
+* Compatible with any template engine
 
 ## Default Site
 
@@ -75,14 +76,23 @@ const hubble = new Hubble({
 ## API Reference
 
 ### `Hubble.generate(template)`
-Will generate the static HTML file based on the Hubble configuration.
+Will generate the site based on the Hubble configuration using the given template.
 
-* `template` - `Function` (optional)
+* `template {Function}` (optional) - method that will receive data, render the data, write it to the output location, and return or throw an error.
 
-**Cases:**
+`template` receives two parameters:
 
-* `template` is a `Function`: the method will pass all data into that function and expect it to return a promise or throw an error.
-* `template` is `undefined`: The method will use the default theme to render the HTML.
+> * `data {Object}` - Configuration and Github data
+> * `output {String}` - Location to write the index.html file to
+
+**Example:**
+
+```javascript
+Hubble.generate(function (data, output) {
+  const render = `<p>${data.user.name}'s custom template.</p>`;
+  fs.writeFileSync(output, render, 'utf8');
+});
+```
 
 ## Tests
 
@@ -109,6 +119,7 @@ npm run lint
 
 HubbleJS uses [SemVer](http://semver.org/) for versioning. For available versions, see the [tags for this repository](/tags).
 
-## Licensing
+## License
 
-Code copyright 2018 Ed Mendoza. Code released under the [MIT license](./LICENSE)
+Copyright (c) 2018 Ed Mendoza.   
+Code released under the [MIT license](./LICENSE).
