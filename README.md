@@ -76,7 +76,7 @@ const hubble = new Hubble({
 ## API Reference
 
 ### `Hubble.generate(template)`
-Will generate the site based on the Hubble configuration using the given template.
+Will generate the site based on the configuration using the given template.
 
 * `template {Function}` (optional) - method that will receive data, render the data, write it to the output location, and return or throw an error.
 
