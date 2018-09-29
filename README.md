@@ -124,8 +124,3 @@ hubble.generate(function (data, output) {
   fs.writeFileSync(output, render, 'utf8')
 });
 ```
-
-## License
-
-Copyright (c) 2018 Ed Mendoza.   
-Code released under the [MIT license](https://github.com/Polyneue/hubblejs/blob/master/LICENSE).
