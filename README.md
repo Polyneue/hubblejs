@@ -1,7 +1,10 @@
 # HubbleJS
-[![Coverage Status](https://coveralls.io/repos/github/Polyneue/hubblejs/badge.svg?branch=master)](https://coveralls.io/github/Polyneue/hubblejs?branch=master)
 
-HubbleJS is a customizable Node.js portfolio generator for developers that is powered by the Github API. 
+[![npm version](https://badge.fury.io/js/hubble.js.svg)](https://badge.fury.io/js/hubble.js)
+[![Coverage Status](https://coveralls.io/repos/github/Polyneue/hubblejs/badge.svg?branch=master)](https://coveralls.io/github/Polyneue/hubblejs?branch=master)
+[![Build Status](https://travis-ci.org/Polyneue/hubblejs.png?branch=master)](https://travis-ci.org/Polyneue/hubblejs)
+
+HubbleJS is a simple, customizable, Github static portfolio generator. HubbleJS is designed to quickly generate a static website with minimal configuration from the user. However, HubbleJS can be configured to use custom templates and has extensive options for generating a site unique for each portfolio.
 
 ## Features
 
@@ -10,12 +13,6 @@ HubbleJS is a customizable Node.js portfolio generator for developers that is po
 * Personalize your Github data
 * Standardized Github response, to easily create custom templates
 * Compatible with any template engine
-
-## Default Site
-
-HubbleJS comes bundled with a default theme that can be customized to reflect your personality. For more information on the default theme, checkout the repository [hubblejs-default-theme](https://github.com/Polyneue/hubblejs-default-theme).
-
-![HubbleJS Default Theme - Dark](https://raw.githubusercontent.com/Polyneue/hubblejs-default-theme/master/examples/images/hubblejs-default-theme-dark-example-1.png)
 
 ## Getting Started
 
@@ -76,6 +73,7 @@ const hubble = new Hubble({
 ## API Reference
 
 ### `Hubble.generate(template)`
+
 Will generate the site based on the configuration using the given template.
 
 * `template {Function}` (optional) - method that will receive data, render the data, write it to the output location, and return or throw an error.
@@ -94,32 +92,40 @@ Hubble.generate(function (data, output) {
 });
 ```
 
-## Tests
+# Themes
 
-All tests use production responses from the Github API. This means that running the test suite will require the following environment variables to be set:
+HubbleJS comes with a built in dark and light theme that can be used right out of the box. It can also be used with any templating language to generate pages using Github API data.
 
-* `GH_USER_NAME` - Your Github user name
-* `GH_ACCESS_TOKEN` - Your personal access token
+## Default Theme
 
-With the above variables set, use the following command to run the test suite and generate a coverage report.
+The default theme can be customized to reflect your personality. For customization options for the default theme, check out the repository [hubblejs-default-theme](https://github.com/Polyneue/hubblejs-default-theme#configuration).
 
-```shell
-npm run cover
+![HubbleJS Default Theme - Dark](https://raw.githubusercontent.com/Polyneue/hubblejs-default-theme/master/examples/images/hubblejs-default-theme-dark-example-1.png)
+
+## Custom Templates
+
+Creating a custom theme for HubbleJS is simple, below is a basic example of using a templating language to generate a unique theme.
+
+The following file will be a basic pug template that will be hydrated with data.
+
+```html
+p #{user.username}'s source code
 ```
 
-## Style guide
+Then we will use the Pug package to render the template.
 
-HubbleJS uses ESLint to validate code style, before submitting a pull request please lint files using the following command:
+```javascript
+const Hubble = require('hubble.js');
+const pug = require('pug');
+const fs = require('fs');
 
-```shell
-npm run lint
+hubble.generate(function (data, output) {
+  const render = pug.compileFile('./pug/temp.pug');
+  fs.writeFileSync(output, render, 'utf8')
+});
 ```
-
-## Versioning
-
-HubbleJS uses [SemVer](http://semver.org/) for versioning. For available versions, see the [tags for this repository](/tags).
 
 ## License
 
 Copyright (c) 2018 Ed Mendoza.   
-Code released under the [MIT license](./LICENSE).
+Code released under the [MIT license](https://github.com/Polyneue/hubblejs/blob/master/LICENSE).
