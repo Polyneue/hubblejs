@@ -5,12 +5,7 @@ const { config, errHandler } = require('./utilities');
 // Handle fixture data generation
 before(async function () {
   console.log('Generate fixture data using:', config.username, config.token);
-
-  try {
-    await generateFixtures();
-  } catch (err) {
-    throw err;
-  }
+  await generateFixtures();
 });
 
 // Handle clean up

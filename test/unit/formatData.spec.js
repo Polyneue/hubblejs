@@ -35,7 +35,7 @@ describe('# formatData()', function () {
   it('filters repositories based on config', function () {
     const count = 3;
     const _repositories = _data.user.repositories.edges
-      .map(repo => repo.node.name)
+      .map((repo) => repo.node.name)
       .splice(0, count);
 
     const _result = formatData(_data, { username, repositories: _repositories, theme });
