@@ -1,6 +1,6 @@
 {
   "name": "hubble.js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A customizable Node.js portfolio generator for developers that is powered by the Github API.",
   "main": "index.js",
   "scripts": {
